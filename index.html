@@ -8,15 +8,15 @@
 </head>
 <body>
 
-<p>Module Details</p>
+<p>Sales Platform Module Details</p>
 <form id="APIRequest" name="APIRequest" onsubmit="alerter();">
   <ul>
     <li>
-      <label for="URIAPIKey">API Key:</label>
+      <label for="URIAPIKey">API Key</label>
       <input type="text" id="URIAPIKey" name="URIAPIKey" value="ey4aqtkvg6t53p56uwakmrba">
     </li>
     <li>
-      <label for="URIEnvironment">Environment:</label>
+      <label for="URIEnvironment">Environment</label>
       <select id="URIEnvironment" name="URIEnvironment">
           <option>TEST</option>
           <option selected>PROD</option>
@@ -24,25 +24,25 @@
       </select>
     </li>
     <li>
-      <label for="URIDomain">Domain:</label>
+      <label for="URIDomain">Domain</label>
       <input type="text" id="URIDomain" name="URIDomain" value="SALESPLATFORM">
     </li>
     <li>
-      <label for="URISiteParameters">Site:</label>
+      <label for="URISiteParameters">Site</label>
       <select id="URISiteParameters" name="URISiteParameters">
         <optgroup label="Education">
           <option>Elementary</option>
           <option>Secondary</option>
-          <option>Higher Education</option>
+          <option value="HigherEducation">Higher Education</option>
         </optgroup>
         <option>Retail</option>
         <option selected>Comics</option>
         <option>Backlist</option>
-        <option>Common Reads</option>
+        <option value="CommonReads">Common Reads</option>
       </select>
     </li>
     <li>
-      <label for="URIModule">Module:</label>
+      <label for="URIModule">Module</label>
       <select id="URIModule" name="URIModule">
         <optgroup label="sales-display">
           <option value="catalog_landing_page">Catalog Landing Page</option>
@@ -60,11 +60,11 @@
       </select>
     </li>
     <li>
-      <label for="URIParameters">Module Parameters:</label>
+      <label for="URIParameters">Module Parameters</label>
       <textarea id="URIParameters" name="URIParameters"></textarea>
     </li>
     <li>
-      <label for="URISortParameters">Sort Parameters:</label>
+      <label for="URISortParameters">Sort Parameters</label>
       <select id="URISortParameters" name="URISortParameters">
         <optgroup label="On Sale">
           <option value="osd_desc">New to Old (DESC)</option>
@@ -81,20 +81,20 @@
       </select>
     </li>
     <li>
-      <label for="URIFilterParameters">Filter Parameters:</label>
+      <label for="URIFilterParameters">Filter Parameters</label>
       <select id="URIFilterParameters" name="URIFilterParameters" multiple>
         <optgroup label="On Sale">
-          <option>On Sale</option>
-          <option selected>Coming Soon</option>
+          <option value="on_sale">On Sale</option>
+          <option value="coming_soon">Coming Soon</option>
         </optgroup>
-        <optgroup label="Format">>
+        <!--<optgroup label="Format">
           <option>Comic</option>
           <option>Paperback</option>
           <option>Hardcover</option>
           <option>Boxed Set</option>
           <option>Board Book</option>
           <option>Stationery and Merchandise</option>
-        </optgroup>
+        </optgroup>-->
       </select>
     </li>
     <li class="button">
