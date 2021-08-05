@@ -1,6 +1,19 @@
 const URIDelim = "/";
 const URIParamConcat = "&";
 
+var today = new Date();
+var tomorrow = new Date();
+tomorrow.setDate(today.getDate() + 1);
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
+var ddT = String(tomorrow.getDate()).padStart(2, '0');
+var mmT = String(tomorrow.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyyT = tomorrow.getFullYear();
+today = mm + '/' + dd + '/' + yyyy;
+tomorrow = mmT + '/' + ddT + '/' + yyyyT;
+
+
 class Module {
 
 	constructor(){
@@ -29,6 +42,14 @@ class APIRequestTemplate {
 	this._URIParameters = URIparameters;
 	this._URSortParameters = URIsort_parameters;
 	this._URIFilterParameters = URIfilter_parameters;
+	}
+
+	getURIFilterParameters() {
+		return this._URIFilterParameters;
+	}
+
+	getURISiteParameters() {
+		return this._URISiteParameters;
 	}
 
 	getURISortParameters() {
@@ -91,7 +112,6 @@ class APIRequestTemplate {
 				return "imprintCode="
 		} 
 	}
-
 	createURI() { 
 		let URI = "";
 		switch(this.getURIEnvironment()) {
@@ -125,6 +145,37 @@ class APIRequestTemplate {
 		}
 		URI = URI + this.getURIParameters();
 		URI = URI + "&api_key=" + this.getURIAPIKey(); 
+		switch(this.getURISortParameters()) {
+			case "osd_desc":
+				URI = URI + "&sort=frontlistiest_onsale&dir=desc";
+				break;
+			case "osd_asc":
+				URI = URI + "&sort=frontlistiest_onsale&dir=asc";
+				break;
+			case "price_desc":
+				URI = URI + "&sort=price&sortPriceTypeCode=USD&dir=desc";
+				break;
+			case "price_asc":
+				URI = URI + "&sort=price&sortPriceTypeCode=USD&dir=asc";
+				break;
+			case "A_Z":
+				URI = URI + "&sort=name&dir=asc";
+				break;
+			case "Z_A":
+				URI = URI + "&sort=name&dir=desc";
+				break;
+		}
+		URI = URI + "&siteFilter=" + this.getURISiteParameters();
+		switch(this.getURIFilterParameters()){
+			case "on_sale":
+				URI = URI + "&onSaleTo=" + today;
+				break;
+			case "coming_soon":
+				URI = URI + "&onSaleFrom=" + tomorrow;
+				break;
+			default:
+				break;
+		}
 		return URI; 
 	}
 }
@@ -141,10 +192,5 @@ function alerter(){
 	let URIsort_parameters = elem.URISortParameters.value;
 	let URIfilter_parameters = elem.URIFilterParameters.value; 
 	let APIRequest = new APIRequestTemplate(URIAPIkey, URIenvironment, URIdomain, URIsite_parameters, URImodule, URIparameters, URIsort_parameters, URIfilter_parameters);
-	//alert(APIRequest.createURI());
 	window.open(APIRequest.createURI());
-	//alert(APIRequest.createURI());
 }
-
-
-
