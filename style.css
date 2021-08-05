@@ -7,7 +7,7 @@
   font-family for monospace
 */
 /* line 36, scss/style.scss */
-p { 
+#title { 
   margin: 0 auto;
   width: 500px;
   /* Form outline */
@@ -86,13 +86,17 @@ textarea {
 
 .button {
   /* Align buttons with the text fields */
-  padding-left: 160px; /* same size as the label elements */
+  border-bottom: 0;
+  padding-left: 185px;
+  vertical-align: middle;
+  width: 100px;
+  height: 5px;
 }
 
 button {
   /* This extra margin represent roughly the same space as the space
      between the labels and their text fields */
-  margin: 0;
+  margin: auto;
 }
 input {
   vertical-align: middle;
@@ -105,4 +109,10 @@ select {
 }
 #URIFilterParameters{
   height:  55px;
+}
+
+#how_to_use {
+  background-color: white;
+  color: black;
+  text-align: center;
 }
