@@ -40,7 +40,7 @@ class APIRequestTemplate {
 	this._URISiteParameters = URIsite_parameters;
 	this._URIModule = URImodule;
 	this._URIParameters = URIparameters;
-	this._URSortParameters = URIsort_parameters;
+	this._URISortParameters = URIsort_parameters;
 	this._URIFilterParameters = URIfilter_parameters;
 	}
 
