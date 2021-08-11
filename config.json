@@ -1,0 +1,29 @@
+{
+	"Environment": [
+	{
+		"name": "TEST",
+		"prefix": "http://interapp-tst/PrhApi/domains/SALESPLATFORM/"
+	},
+	{
+		"name": "PROD",
+		"prefix": "https://api.penguinrandomhouse.com/resources/v2/title/domains"
+	},
+	{
+		"name": "DEV",
+		"prefix": "http://interapp-dev/PrhApi/domains/SALESPLATFORM/"
+	}
+	],
+	"Site": [
+		{
+		"name": "Comics",
+		"siteFilter": "Comics",
+		"zoomCatSetId": "CM"
+		}
+	],
+	"Module": [
+		{
+		"name": "Catalog",
+		"service": "sales-display"
+		}
+	]
+}

@@ -5,11 +5,11 @@
 <title>API Request Configuration</title>
 <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">-->
 <link rel="stylesheet" href="style.css">
-</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script></head>
 <body>
 
-<p id="title">Sales Platform Module Details</p>
-<form id="APIRequest" name="APIRequest" onsubmit="alerter();">
+<p class="title top">Sales Platform Module Details</p>
+<form id="APIRequest" name="APIRequest">
   <ul>
     <li>
       <label for="URIAPIKey">API Key</label>
@@ -18,45 +18,20 @@
     <li>
       <label for="URIEnvironment">Environment</label>
       <select id="URIEnvironment" name="URIEnvironment">
-          <option>TEST</option>
-          <option selected>PROD</option>
-          <option>DEV</option>
       </select>
     </li>
     <li>
       <label for="URIDomain">Domain</label>
-      <input type="text" id="URIDomain" name="URIDomain" value="SALESPLATFORM">
+      <input type="text" id="URIDomain" name="URIDomain">
     </li>
     <li>
       <label for="URISiteParameters">Site</label>
       <select id="URISiteParameters" name="URISiteParameters">
-        <optgroup label="Education">
-          <option>Elementary</option>
-          <option>Secondary</option>
-          <option value="HigherEducation">Higher Education</option>
-        </optgroup>
-        <option>Retail</option>
-        <option selected>Comics</option>
-        <option>Backlist</option>
-        <option value="CommonReads">Common Reads</option>
       </select>
     </li>
     <li>
       <label for="URIModule">Module</label>
       <select id="URIModule" name="URIModule">
-        <optgroup label="sales-display">
-          <option value="catalog_landing_page">Catalog Landing Page</option>
-          <option value="category_landing_page">Category Landing Page</option>
-          <option value="division_landing_page">Division Landing Page</option>
-          <option value="imprint_landing_page">Imprint Landing Page</option>
-          <option value="series_landing_page">Series Landing Page</option>
-        </optgroup>
-        <optgroup label="product-display">
-          <option value="book_detail_page">Book Detail Page</option>
-        </optgroup>
-        <optgroup label="listTitles">
-          <option value="dynamic_carousel">Dynamic Carousel</option>
-        </optgroup>
       </select>
     </li>
     <li>
@@ -64,46 +39,120 @@
       <textarea id="URIParameters" name="URIParameters"></textarea>
     </li>
     <li>
-      <label for="URISortParameters">Sort Parameters</label>
+      <label for="URISortParameters">Sort</label>
       <select id="URISortParameters" name="URISortParameters">
-        <optgroup label="On Sale">
-          <option value="osd_desc">New to Old (DESC)</option>
-          <option selected value="osd_asc">Old to New (ASC) </option>
-        </optgroup>
-        <optgroup label="Price">
-          <option value="price_desc">High to Low</option>
-          <option value="price_asc">Low to High</option>
-        </optgroup>
-        <optgroup label="Alphabetical">>
-          <option value="A_Z">A - Z</option>
-          <option value="Z_A">Z - A</option>
-        </optgroup>
+      </select>
+    </li>
+    <li>
+      <label for="URIFilter">Filter</label>
+      <select id="URIFilter" name="URIFilter" multiple>
       </select>
     </li>
     <li>
       <label for="URIFilterParameters">Filter Parameters</label>
-      <select id="URIFilterParameters" name="URIFilterParameters" multiple>
-        <optgroup label="Sale Status">
-          <option value="on_sale">Avaliable Now</option>
-          <option value="coming_soon">Coming Soon</option>
-        </optgroup>
-        <!--<optgroup label="Format">
-          <option>Comic</option>
-          <option>Paperback</option>
-          <option>Hardcover</option>
-          <option>Boxed Set</option>
-          <option>Board Book</option>
-          <option>Stationery and Merchandise</option>
-        </optgroup>-->
+      <textarea id="URIFilterParameters" name="URIFilterParameters"></textarea>
+    </li>
+    <li>
+      <label for="URIRows">Rows</label>
+      <input type="text" id="URIRows" name="URIRows">
+    </li>
+    <li>
+      <label for="returnFields">Fields Returned</label>
+      <select id="returnFields" name="returnFields" multiple>
       </select>
-      <!--commit-test-->
     </li>
     <li class="button">
-      <button type="submit" form="APIRequest">Generate API Request</button>
+      <button type="button" onclick="alerter();" form="APIRequest">Generate API Request</button>
     </li>
   </ul>
 </form>
   <p id="how_to_use"><a href="https://github.com/alexanderzliu/PRHSP-API-Requester/blob/main/README.md">How to Use</a></p>
 <script type="text/javascript" src="tester.js"></script>
+<script>
+let environmentConfig = config.Environment;
+let siteConfig = config.Site;
+let moduleConfig = config.Module;
+let sortConfig = config.Sort;
+let filterConfig = config.Filter;
+let fieldsConfig = config.Fields;
+
+function setDefaults(){ 
+  let apiKeyInput = $('#URIAPIKey');
+  let domainInput = $('#URIDomain');
+  let rowsInput = $('#URIRows');
+  apiKeyInput.val(defaultAPIKey);
+  domainInput.val(defaultDomain);
+  rowsInput.val(defaultRows);
+}
+
+function populateEnvironmentOptions(){
+  let environmentInput = $('#URIEnvironment');
+  for (let i=0; i < environmentConfig.length; i++) {
+    let opt = document.createElement('option')
+    opt.innerHTML = environmentConfig[i].name;
+    opt.value = environmentConfig[i].prefix;
+    environmentInput.append(opt);
+    }
+}
+
+function populateSiteOptions(){
+  let siteInput = $('#URISiteParameters');
+  for (let i=0; i < siteConfig.length; i++) {
+    let opt = document.createElement('option')
+    opt.innerHTML = siteConfig[i].name;
+    opt.value = siteConfig[i].siteFilter;
+    siteInput.append(opt);
+    }
+}
+
+function populateModuleOptions(){
+  let moduleInput = $('#URIModule');
+  for (let i=0; i < moduleConfig.length; i++) {
+    let opt = document.createElement('option')
+    opt.innerHTML = moduleConfig[i].name;
+    opt.value = moduleConfig[i].value;
+    moduleInput.append(opt);
+    }
+}
+
+function populateSortOptions(){
+  let sortInput = $('#URISortParameters');
+  for (let i=0; i < sortConfig.length; i++) {
+    let opt = document.createElement('option')
+    opt.innerHTML = sortConfig[i].name;
+    opt.value = sortConfig[i].path;
+    sortInput.append(opt);
+    }
+}
+
+function populateFilterOptions(){
+  let filterInput = $('#URIFilter');
+  for (let i=0; i < filterConfig.length; i++) {
+    let opt = document.createElement('option')
+    opt.innerHTML = filterConfig[i].name;
+    opt.value = filterConfig[i].path;
+    filterInput.append(opt);
+    }
+}
+
+function populateFieldsReturnedOptions(){
+  let fieldsInput = $('#returnFields');
+  for (let i=0; i < fieldsConfig.length; i++) {
+    let opt = document.createElement('option')
+    opt.innerHTML = fieldsConfig[i].name;
+    opt.value = fieldsConfig[i].name;
+    fieldsInput.append(opt);
+    }
+}
+
+setDefaults();
+populateEnvironmentOptions();
+populateSiteOptions();
+populateModuleOptions();
+populateSortOptions();
+populateFilterOptions();
+populateFieldsReturnedOptions();
+
+</script>
 </body>
 </html>
