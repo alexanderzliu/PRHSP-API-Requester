@@ -7,6 +7,10 @@
   font-family for monospace
 */
 /* line 36, scss/style.scss */
+.headerText {
+  font-weight: bold; 
+}
+
 td { 
   border: 1px solid #23A2ED;
   padding-inline: .3em

@@ -127,19 +127,19 @@ const config = {
 		},
 		{
 		"name":"onSaleTo",
-		"path": "&catURI="
+		"path": "&onSaleTo="
 		},
 		{
 		"name":"onSaleFrom",
-		"path": "&catURI="
+		"path": "&onSaleFrom="
 		},
 		{
 		"name":"Age",
-		"path": "&catURI="
+		"path": "&ageRange="
 		},
 		{
-		"name":"Grade",
-		"path": "&catURI="
+		"name":"Publisher",
+		"path": "&dvisionCode="
 		}
 	],
 	"Fields": [ 
@@ -174,13 +174,10 @@ const config = {
 		"name":"catalogs"
 		},
 		{
-		"name":"records"
+		"name":"coverVariantDesc"
 		},
 		{
-		"name":"isbn"
-		},
-		{
-		"name":"isbn"
+		"name":"familyCoverVariantFlag"
 		},
 	]
 	
@@ -208,20 +205,7 @@ var yyyyT = tomorrow.getFullYear();
 today = mm + '/' + dd + '/' + yyyy;
 tomorrow = mmT + '/' + ddT + '/' + yyyyT;
 
-class Module {
-	constructor(){
-		_name = "";
-		_URI = ""; 
-	}
-	setName(name) {
-		this._name = name;
-	}
-
-	getName() {
-		return this._name;
-	}
-}
-
+//Class for API Request with fields/methods needed to generate URI for API call that module uses
 class APIRequestTemplate {
 
 	constructor(URIAPIkey, URIenvironment, URIdomain, URIsite_parameters, URImodule, URIparameters, 
@@ -332,12 +316,12 @@ class APIRequestTemplate {
 				return "imprintCode="
 		} 
 	}
-
+	//Method that takes form input and generates URI based on it.
 	createURI() { 
 		let URI = "";
 		URI = URI + this.getURIEnvironment(); //add environment to URI
 		URI = URI + this.getURIDomain(); // add domain to URI
-		switch(this.getURIModule()) {
+		switch(this.getURIModule()) { //Determine which endpoint and view to use based on module
 			case "catalog":
 			case "category":
 			case "series":
@@ -352,13 +336,15 @@ class APIRequestTemplate {
 				break;
 			case "dynamicCarousel":
 				URI = URI + "/titles?";
-				this.setURIService("title-display")
+				this.setURIService("listTitles")
 				break;
 		}
 		URI = URI + this.getURIParameters(); 
 		URI = URI + "&api_key=" + this.getURIAPIKey(); 
 		URI = URI + this.getURISortParameters();
 		URI = URI + "&siteFilter=" + this.getURISiteParameters();
+		URI = URI + this.getURIFilter() + this.getURIFilterParameters();
+		/**
 		switch(this.getURIFilter()) {
 			case "on_sale":
 				URI = URI + "&onSaleTo=" + today;
@@ -369,68 +355,84 @@ class APIRequestTemplate {
 			default:
 				break;
 		}
-		URI = URI + this.getURIFilterParameters();
+		*/
+		//URI = URI + this.getURIFilterParameters();
 		URI = URI + "&rows=" + this.getURIRows();
 		this.setURI(URI);
 		return URI; 
 	}
 }
-async function scrapeAPI(URI, service,returnFields, rows){
+//Function to request and scrape the information off the API
+async function scrapeAPI(URI, service,returnFields, APIRequest){
 	let url = URI;
 	let response = await fetch(url);
 	let result = await response.json();
 	let parsed = JSON.parse(JSON.stringify(result));
 	//.catch(err => throw rr);
 	//for (let title of titles) {
-	displayResults(parsed, service,returnFields,rows);
+	displayResults(parsed, service,returnFields,APIRequest);
 }
-
-function displayResults(apiResponse, service,returnFields,rows) {
+//Function to build and populate the table that will display the requested information of API
+function displayResults(apiResponse, service,returnFields, APIRequest) {
 	let data = apiResponse.data;
-	let titles = data.titles; 
+	//let titles = data.titles; 
 	let serv = service;
 	let fields = returnFields;
+	let params = APIRequest.getURIParameters();
 	let body = $('body'); 
 	let bottom = $('#how_to_use');
 	let tbl = document.createElement("table");
-	let tableRows = rows;
-	//let tblBody = document.createElement("tbody");
-	//bottom.append(tbl);
-	//tbl.append(tblHead); 
+	let tableRows = APIRequest.getURIRows();
 	let headerRow = document.createElement('tr'); 
+
+	//Create header row with metadata field names
 	for (let i = 0; i < fields.length; i++) {
-		//alert(fields.length);
-		//alert(fields[i]);
 		let cell = document.createElement('td');
 		cell.innerHTML = fields[i];
 		headerRow.appendChild(cell);
-		//tblHead.append(headCells);
 	}
-	//tblBody.append(row);
 	tbl.appendChild(headerRow);
-	for (let title of titles) {
-		//alert(title.isbn)
-		let row = document.createElement('tr');
-		for (let k = 0; k  < fields.length; k++) { 
-			let cell = document.createElement('td');
-			//alert(fields[k]) //only iterating once
-			//console.log(title[fields[k]]);
-			cell.innerHTML = JSON.stringify(title[fields[k]]);
-			row.appendChild(cell);
-		}
-		tbl.appendChild(row); 
+	//Use relevant scraping method for the chosen end-point to populate table rows.
+	switch(serv){
+		case "sales-display":
+		case "listTitles":
+		let titles = data.titles;
+			for (let title of titles) {
+				let row = document.createElement('tr');
+				for (let k = 0; k  < fields.length; k++) { 
+					let cell = document.createElement('td');
+					cell.innerHTML = JSON.stringify(title[fields[k]]);
+					row.appendChild(cell);
+				}
+				tbl.appendChild(row); 
+			}
+			break;
+		case "product-display":
+		let formats = data.formats;
+			for (let format in formats) { 
+				for (let title in formats[format]) {
+					let title = formats[format]
+					console.log(title)
+					for (let titleIsbn in title) {
+						let titleObj = title[titleIsbn]
+						let row = document.createElement('tr');
+						for (let k = 0; k  < fields.length; k++) { 
+							let cell = document.createElement('td');
+							cell.innerHTML = JSON.stringify(titleObj[fields[k]]);
+							row.appendChild(cell);
+						}
+						tbl.appendChild(row); 
+					}
+				}
+			}
+			break;
+
 	}
-	
+	//Add table to end of page.
 	body.append(tbl); 
-	//if (serv == "sales-display") {
-		//let titles = data.titles; 
-		//for (let title of titles) { 	
-		//tbl.innerHTML = String(fields.length);
-		//let tblBody = document.createElement('tbody');
-	//}
 }
 
-
+//Function to display the generated URI at the bottom of page.
 function displayURI(URI){
 	uri = URI
 	let body = $('body');
@@ -440,7 +442,13 @@ function displayURI(URI){
 		URIDisplay.innerHTML = String(uri);
 	body.append(URIDisplay);
 }
-
+/**Function that initializes the API request process. 
+ * Creates an APIRequest object from form input. 
+ * Calls sequential functions to: 
+ * display URI (displayURI()) 
+ * send request to API and scrape response (scrapeAPI())
+ * and finally: display the results on the bottom of page
+ */
 function alerter(){
 	let form = document.forms.APIRequest;
 	let elem = form.elements;
@@ -460,7 +468,7 @@ function alerter(){
 	let URI = APIRequest.getURI();
 	let APIService = APIRequest.getURIService(); 
 	displayURI(URI);
-	scrapeAPI(URI, APIService,returnFields, URIrows);
+	scrapeAPI(URI, APIService,returnFields, APIRequest);
 	window.open(URI);
 	//window.open("output.html");
 	//alert(APIRequest.getURI());
