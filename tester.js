@@ -184,7 +184,7 @@ const config = {
 }
 
 //MODIFY THESE AS APPROPRIATE TO CHANGE DEFAULT VALUES OF APIKEY AND DOMAIN
-const defaultAPIKey = "ey4aqtkvg6t53p56uwakmrba"
+const defaultAPIKey = ""
 const defaultDomain = "SALESPLATFORM"
 const defaultRows = "0"
 
