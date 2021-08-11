@@ -7,9 +7,28 @@
   font-family for monospace
 */
 /* line 36, scss/style.scss */
-#title { 
+td { 
+  border: 1px solid #23A2ED;
+  padding-inline: .3em
+}
+
+
+
+table { 
   margin: 0 auto;
   width: 500px;
+  /* Form outline */
+  padding: 1em;
+  border: 1px solid #CCC;
+  border-color: #23A2ED;
+  border-radius: 1em;
+  background-color: #E8F6FE;
+ }
+
+
+.title { 
+  margin: 0 auto;
+  width: auto;
   /* Form outline */
   padding: 1em;
   border: 1px solid #CCC;
@@ -19,6 +38,9 @@
   text-align: center;
   font-family:  Andale, monospace;
  }
+.top{
+  width:  500px;
+}
 form {
   /* Center the form on the page */
   margin: 0 auto;
@@ -107,9 +129,7 @@ select {
   vertical-align: middle;
   width: 300px;
 }
-#URIFilterParameters{
-  height:  55px;
-}
+
 
 #how_to_use {
   background-color: white;
