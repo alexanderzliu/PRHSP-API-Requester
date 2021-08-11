@@ -97,11 +97,11 @@ const config = {
 	],
 	"Sort": [
 		{
-		"name": "OSD: Old to New",
+		"name": "OSD: New to Old",
 		"path": "&sort=frontlistiest_onsale&dir=desc"
 		},
 		{
-		"name": "OSD: New to Old",
+		"name": "OSD: Old to New",
 		"path": "&sort=frontlistiest_onsale&dir=asc"
 		},
 		{
@@ -140,7 +140,11 @@ const config = {
 		},
 		{
 		"name":"Publisher",
-		"path": "&dvisionCode="
+		"path": "&divisionCode="
+		},
+		{
+		"name":"Format",
+		"path": "&formatCode="
 		}
 	],
 	"Fields": [ 
