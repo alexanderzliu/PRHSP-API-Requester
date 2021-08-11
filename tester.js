@@ -1,3 +1,4 @@
+//Change these fields as necessary with updates to API or Sales Platform
 const config = {
 	"Environment": [
 		{
@@ -183,27 +184,12 @@ const config = {
 	
 }
 
-//MODIFY THESE AS APPROPRIATE TO CHANGE DEFAULT VALUES OF APIKEY AND DOMAIN
-const defaultAPIKey = ""
-const defaultDomain = "SALESPLATFORM"
+//Change these to your desired defaults for APIKey, Domain and Rows form fields.
+const defaultAPIKey = "ey4aqtkvg6t53p56uwakmrba"
+const defaultDomain = "SALESPLATFORM" 
 const defaultRows = "0"
 
-
-const URIDelim = "/";
-const URIParamConcat = "&";
-
-
-var today = new Date();
-var tomorrow = new Date();
-tomorrow.setDate(today.getDate() + 1);
-var dd = String(today.getDate()).padStart(2, '0');
-var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-var yyyy = today.getFullYear();
-var ddT = String(tomorrow.getDate()).padStart(2, '0');
-var mmT = String(tomorrow.getMonth() + 1).padStart(2, '0'); //January is 0!
-var yyyyT = tomorrow.getFullYear();
-today = mm + '/' + dd + '/' + yyyy;
-tomorrow = mmT + '/' + ddT + '/' + yyyyT;
+//Below here is the actual code that powers the requester/scraper.
 
 //Class for API Request with fields/methods needed to generate URI for API call that module uses
 class APIRequestTemplate {
@@ -343,20 +329,14 @@ class APIRequestTemplate {
 		URI = URI + "&api_key=" + this.getURIAPIKey(); 
 		URI = URI + this.getURISortParameters();
 		URI = URI + "&siteFilter=" + this.getURISiteParameters();
-		URI = URI + this.getURIFilter() + this.getURIFilterParameters();
-		/**
-		switch(this.getURIFilter()) {
-			case "on_sale":
-				URI = URI + "&onSaleTo=" + today;
-				break;
-			case "coming_soon":
-				URI = URI + "&onSaleFrom=" + tomorrow;
-				break;
-			default:
-				break;
+		//add multiple filters to uri
+		let filters = this.getURIFilter();
+		let filterParamString = this.getURIFilterParameters();
+		const filterParams = filterParamString.split(" "); 
+		let filterLength = Math.min(filters.length, filterParams.length);
+		for (let i = 0; i < filterLength; i++){
+			URI = URI + filters[i] + filterParams[i];
 		}
-		*/
-		//URI = URI + this.getURIFilterParameters();
 		URI = URI + "&rows=" + this.getURIRows();
 		this.setURI(URI);
 		return URI; 
@@ -365,17 +345,26 @@ class APIRequestTemplate {
 //Function to request and scrape the information off the API
 async function scrapeAPI(URI, service,returnFields, APIRequest){
 	let url = URI;
+	//try{
 	let response = await fetch(url);
+	if (response.status == 404){
+		console.log('error');
+		alert('Could not find page. Check inputs for correctness.')
+	}
 	let result = await response.json();
+	//} catch (err) {
+		//console.log('error');
+		//alert(err);
+	//}
 	let parsed = JSON.parse(JSON.stringify(result));
 	//.catch(err => throw rr);
 	//for (let title of titles) {
 	displayResults(parsed, service,returnFields,APIRequest);
+	window.open(url)
 }
 //Function to build and populate the table that will display the requested information of API
 function displayResults(apiResponse, service,returnFields, APIRequest) {
 	let data = apiResponse.data;
-	//let titles = data.titles; 
 	let serv = service;
 	let fields = returnFields;
 	let params = APIRequest.getURIParameters();
@@ -459,7 +448,7 @@ function alerter(){
 	let URIsite_parameters = elem.URISiteParameters.value; 
 	let URIparameters = elem.URIParameters.value; 
 	let URIsort_parameters = elem.URISortParameters.value;
-	let URIfilter = elem.URIFilter.value; 
+	let URIfilter = $('#URIFilter').val();  
 	let URIfilter_parameters = elem.URIFilterParameters.value;
 	let URIrows = elem.URIRows.value;
 	let returnFields = $('#returnFields').val(); 
@@ -469,9 +458,7 @@ function alerter(){
 	let APIService = APIRequest.getURIService(); 
 	displayURI(URI);
 	scrapeAPI(URI, APIService,returnFields, APIRequest);
-	window.open(URI);
-	//window.open("output.html");
-	//alert(APIRequest.getURI());
+
 }
 
 

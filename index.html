@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="style.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script></head>
 <body>
-
 <p class="title top">Sales Platform Module Details</p>
 <form id="APIRequest" name="APIRequest">
   <ul>
@@ -69,6 +68,9 @@
   <p id="how_to_use"><a href="https://github.com/alexanderzliu/PRHSP-API-Requester/blob/main/README.md">How to Use</a></p>
 <script type="text/javascript" src="tester.js"></script>
 <script>
+/**NOTE: This script is to generate the layout of the form based on the config JSON in tester.js */
+
+//Load in state of config JSON. 
 let environmentConfig = config.Environment;
 let siteConfig = config.Site;
 let moduleConfig = config.Module;
@@ -76,6 +78,7 @@ let sortConfig = config.Sort;
 let filterConfig = config.Filter;
 let fieldsConfig = config.Fields;
 
+//These functions are to generate the layout of the form based on the config JSON in tester.js.
 function setDefaults(){ 
   let apiKeyInput = $('#URIAPIKey');
   let domainInput = $('#URIDomain');
@@ -145,6 +148,7 @@ function populateFieldsReturnedOptions(){
     }
 }
 
+//Call functions to generate document.
 setDefaults();
 populateEnvironmentOptions();
 populateSiteOptions();
