@@ -32,13 +32,15 @@ Enter the conditions for the dynamic titile list. This will be a **key-value pai
 
 **Sort**: Select the sort and order parameters applied to the module. 
 
-**Filter**: Select the filter applied to the module.
+**Filter**: Select the filter(s) applied to the module.
 
-**Filter** Input the value for the filter specific parameters for the filter you have selected.
+**Filter** Input the value(s) for the filter specific parameters for the filter you have selected.
 
 For example, if "Publisher" is selected, enter the divisionCode of the desired publisher to filter by i.e "H6" to see only Marvel titles. 
 Similarly, if "onSaleTo/From" is selected, enter the date to filter on sale dates by in MM/DD/YYYY format. 
 Do not specify the key of the parameter, only the value.
+
+You can enter multiple filter values if you have selected multiple filters. Delimit the values with a space, and order the filter parameters entered in the order that the filters you have selected appear in the form. 
 
 **Rows** Input the number of rows (titles) to return from the request and display on the table. Value of 0 returns all rows. Default is 0. 
 
