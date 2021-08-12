@@ -34,14 +34,42 @@ Enter the conditions for the dynamic titile list. This will be a **key-value pai
 
 **Filter**: Select the filter(s) applied to the module.
 
-**Filter** Input the value(s) for the filter specific parameters for the filter you have selected.
+**Filter Parameters** Input the value(s) for the filter specific parameters for the filter you have selected.
 
 For example, if "Publisher" is selected, enter the divisionCode of the desired publisher to filter by i.e "H6" to see only Marvel titles. 
 Similarly, if "onSaleTo/From" is selected, enter the date to filter on sale dates by in MM/DD/YYYY format. 
 Do not specify the key of the parameter, only the value.
 
-You can enter multiple filter values if you have selected multiple filters. Delimit the values with a space, and order the filter parameters entered in the order that the filters you have selected appear in the form. 
+You can enter multiple filter values if you have selected multiple filters. **Delimit the values with a space**, and order the filter parameters entered in the order that the filters you have selected appear in the form. 
 
 **Rows** Input the number of rows (titles) to return from the request and display on the table. Value of 0 returns all rows. Default is 0. 
 
 **Fields Returned** Select the metadata fields from the API to view in table format. 
+
+
+###How to Edit Form Fields
+
+Open "tester.js" (might have to right click and "Open with" a proper text editor)
+
+**File has comments throughout to try and label what form field you are editing.**
+
+
+JSON object has 6 categories at the highest level: Environment, Site, Module, Sort, Filter and Fields
+
+These objects have 1 or more attributes.
+
+**Name**: Common to every attribute. This is what will be displayed on the button or select option.
+
+**Prefix/Path**: URI component unique to the module, sort, or filter or environment. Used in construction of URI. If changing make sure to obey formatting of existing configuration. 
+
+**Service** : The API service used to make the request. Either product-display, sales-display, author-display or listTitles. Can find service for module in Sales Platform_Metadata_Specs spreadsheet. 
+
+**siteFilter**: value for siteFilter parameter in API that is used to filter universe of titles for site.
+
+**catSetId**: Value for catSetId parameter in API for site that is used to get categories from category set. 
+
+**Value**: Used in the internal construction of URI based on Module. 
+
+Below the config JSON object are three "consts": defaultAPIKey, defaultDomain, defaultRows
+
+These will change the value pre-filled into the form upon load to the value input. 
